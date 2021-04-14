@@ -34,7 +34,6 @@ def sitemap():
 def handle_hello():
     people_query = User.query.all()
     all_people = list(map(lambda x: x.serialize(), people_query))
-    
     return jsonify(response_body), 200
 
 # this only runs if `$ python src/main.py` is executed

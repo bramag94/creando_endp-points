@@ -34,7 +34,15 @@ def sitemap():
 def handle_hello():
     people_query = User.query.all()
     all_people = list(map(lambda x: x.serialize(), people_query))
-    return jsonify(response_body), 200
+    return jsonify(all_people), 200
+
+@app.route('/user', methods=['POST'])
+def crear_user():
+    data = request.get_json()
+    user1 = User(User(is_active=data["is active"],username=data["username"],email=data["email"],password=password)
+    db.session.add(user1)
+    db.session.commit()
+    return jsonify ("Message : Se adiciono un usuario!"), 200
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':

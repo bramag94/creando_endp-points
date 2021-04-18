@@ -30,19 +30,31 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
+#Método GET#
 @app.route('/user', methods=['GET'])
 def handle_hello():
     people_query = User.query.all()
     all_people = list(map(lambda x: x.serialize(), people_query))
     return jsonify(all_people), 200
 
+@app.route('/user/<id>', methods=["GET"])
+def busqueda_usuario(id):
+    user1 = User.query.filter_by(id=id).first()
+    if user1 is None:
+        return APIException("No se encontro el usuario",status_code=404)
+    request_body = user1.serialize()
+    return jsonify(request_body),200
+
+
+#Método POST#
 @app.route('/user', methods=['POST'])
-def crear_user():
+def create_user():
     data = request.get_json()
-    user1 = User(User(is_active=data["is active"],username=data["username"],email=data["email"],password=password)
+    user1 = User(email=data["email"],password=data["password"]) #is_active=data["is_active"]
     db.session.add(user1)
     db.session.commit()
     return jsonify ("Message : Se adiciono un usuario!"), 200
+  #  return jsonify({user1}), 200
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
